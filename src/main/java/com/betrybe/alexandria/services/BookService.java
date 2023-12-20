@@ -2,8 +2,10 @@ package com.betrybe.alexandria.services;
 
 import com.betrybe.alexandria.models.entities.Book;
 import com.betrybe.alexandria.models.entities.BookDetail;
+import com.betrybe.alexandria.models.entities.Publisher;
 import com.betrybe.alexandria.models.repositories.BookDetailRepository;
 import com.betrybe.alexandria.models.repositories.BookRepository;
+import com.betrybe.alexandria.models.repositories.PublisherRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +15,13 @@ import org.springframework.stereotype.Service;
 public class BookService {
   private final BookRepository bookRepository;
   private final BookDetailRepository bookDetailRepository;
+  private final PublisherRepository publisherRepository;
 
   @Autowired
-  public BookService(BookRepository bookRepository, BookDetailRepository bookDetailRepository) {
+  public BookService(BookRepository bookRepository, BookDetailRepository bookDetailRepository, PublisherRepository publisherRepository) {
     this.bookRepository = bookRepository;
     this.bookDetailRepository = bookDetailRepository;
+    this.publisherRepository = publisherRepository;
   }
 
   public Book insertBook(Book book) {
@@ -57,36 +61,91 @@ public class BookService {
   }
 
   // CRUD para BookDetail
-  public BookDetail insertBookDetail(BookDetail bookDetail) {
-    return bookDetailRepository.save(bookDetail);
-  }
-  public Optional<BookDetail> getBookDetailById(Long id) {
-    return bookDetailRepository.findById(id);
-  }
-
-  public Optional<BookDetail> updateBookDetail(Long id, BookDetail bookDetail) {
-    Optional<BookDetail> optionalBook = bookDetailRepository.findById(id);
+  public Optional<BookDetail> insertBookDetail(Long bookId, BookDetail bookDetail) {
+    Optional<Book> optionalBook = bookRepository.findById(bookId);
 
     if (optionalBook.isPresent()) {
-      BookDetail bookFromDB = optionalBook.get();
-      bookFromDB.setSumary(bookDetail.getSumary());
-      bookFromDB.setPageCount(bookDetail.getPageCount());
-      bookFromDB.setYear(bookDetail.getYear());
-      bookFromDB.setIsbn(bookDetail.getIsbn());
-
-      BookDetail updatedBook = bookDetailRepository.save(bookFromDB);
-      return Optional.of(updatedBook);
+      Book book = optionalBook.get();
+      bookDetail.setBook(book);
+      BookDetail newBookDetail = bookDetailRepository.save(bookDetail);
+      return Optional.of(newBookDetail);
     }
-    return optionalBook;
+
+    return Optional.empty();
   }
 
-  public Optional<BookDetail> removeBookDetailById(Long id) {
-    Optional<BookDetail> optionalBook = bookDetailRepository.findById(id);
+//  public Optional<BookDetail> getBookDetailById(Long id) {
+//    return bookDetailRepository.findById(id);
+//  }
+
+  public Optional<BookDetail> updateBookDetail(Long bookId, BookDetail bookDetail) {
+    Optional<Book> optionalBook = bookRepository.findById(bookId);
 
     if (optionalBook.isPresent()) {
-      bookDetailRepository.deleteById(id);
+      Book book = optionalBook.get();
+      BookDetail bookDetailFromDB = book.getDetails();
+      bookDetailFromDB.setSummary(bookDetail.getSummary());
+      bookDetailFromDB.setPageCount(bookDetail.getPageCount());
+      bookDetailFromDB.setYear(bookDetail.getYear());
+      bookDetailFromDB.setIsbn(bookDetail.getIsbn());
+
+      BookDetail updatedBookDetail = bookDetailRepository.save(bookDetailFromDB);
+      return Optional.of(updatedBookDetail);
     }
 
-    return optionalBook;
+    return Optional.empty();
+  }
+
+  public Optional<BookDetail> removeBookDetailById(Long bookId) {
+    Optional<Book> optionalBook = bookRepository.findById(bookId);
+
+    if (optionalBook.isPresent()) {
+      Book book = optionalBook.get();
+      Optional<BookDetail> optionalBookDetail = bookDetailRepository.findById(book.getDetails().getId());
+
+      if (optionalBookDetail.isPresent()) {
+        book.setDetails(null);
+        BookDetail bookDetail = optionalBookDetail.get();
+        bookDetailRepository.deleteById(bookDetail.getId());
+
+        return Optional.of(bookDetail);
+      }
+    }
+
+    return Optional.empty();
+  }
+
+  public Optional<Book> setPublisher(Long bookId, Long publisherId) {
+    Optional<Book> optionalBook = bookRepository.findById(bookId);
+    if(optionalBook.isEmpty()){
+      return Optional.empty();
+    }
+
+    Optional<Publisher> optionalPublisher = publisherRepository.findById(publisherId);
+    if(optionalPublisher.isEmpty()){
+      return Optional.empty();
+    }
+
+    Book book = optionalBook.get();
+    Publisher publisher = optionalPublisher.get();
+
+    book.setPublisher(publisher);
+    Book updatedBook = bookRepository.save(book);
+
+    return Optional.of(updatedBook);
+
+  }
+
+  public Optional<Book> removePublisher(Long bookId) {
+    Optional<Book> optionalBook = bookRepository.findById(bookId);
+    if(optionalBook.isEmpty()){
+      return Optional.empty();
+    }
+
+    Book book = optionalBook.get();
+    book.setPublisher(null);
+
+    Book newBook = bookRepository.save(book);
+    return Optional.of(newBook);
   }
 }

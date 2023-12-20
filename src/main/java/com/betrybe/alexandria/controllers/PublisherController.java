@@ -32,7 +32,7 @@ public class PublisherController {
   @PostMapping
   public ResponseEntity<ResponseDTO<Publisher>> createPublisher(@RequestBody PublisherDTO publisherDTO) {
     Publisher newPublisher = publisherService.insertPublisher(publisherDTO.toPublisher());
-    ResponseDTO<Publisher> responseDTO = new ResponseDTO<Publisher>("Livro criado com sucesso.", newPublisher);
+    ResponseDTO<Publisher> responseDTO = new ResponseDTO<Publisher>("Editora criada com sucesso.", newPublisher);
     return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
   }
 
@@ -41,11 +41,11 @@ public class PublisherController {
     Optional<Publisher> optionalPublisher = publisherService.updatePublisher(publisherId, publisherDTO.toPublisher());
 
     if (optionalPublisher.isEmpty()) {
-      ResponseDTO<Publisher> responseDTO = new ResponseDTO<>(String.format("Livro com id %d não encontrado", publisherId), null);
+      ResponseDTO<Publisher> responseDTO = new ResponseDTO<>(String.format("Editora com id %d não encontrado", publisherId), null);
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
     }
 
-    ResponseDTO<Publisher> responseDTO = new ResponseDTO<>("Livro atualizado com sucesso.", optionalPublisher.get());
+    ResponseDTO<Publisher> responseDTO = new ResponseDTO<>("Editora atualizada com sucesso.", optionalPublisher.get());
     return ResponseEntity.ok(responseDTO);
   }
 
@@ -54,11 +54,11 @@ public class PublisherController {
     Optional<Publisher> optionalPublisher = publisherService.removePublisherById(publisherId);
 
     if (optionalPublisher.isEmpty()) {
-      ResponseDTO<Publisher> responseDTO = new ResponseDTO<>(String.format("Livro com id %d não encontrado", publisherId), null);
+      ResponseDTO<Publisher> responseDTO = new ResponseDTO<>(String.format("Editora com id %d não encontrado", publisherId), null);
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
     }
 
-    ResponseDTO<Publisher> responseDTO = new ResponseDTO<>("Livro removido com sucesso", optionalPublisher.get());
+    ResponseDTO<Publisher> responseDTO = new ResponseDTO<>("Editora removida com sucesso", optionalPublisher.get());
     return ResponseEntity.ok(responseDTO);
   }
 
@@ -67,11 +67,11 @@ public class PublisherController {
     Optional<Publisher> optionalPublisher = publisherService.getPublisherById(publisherId);
 
     if (optionalPublisher.isEmpty()) {
-      ResponseDTO<Publisher> responseDTO = new ResponseDTO<>(String.format("Livro com id %d não encontrado", publisherId), null);
+      ResponseDTO<Publisher> responseDTO = new ResponseDTO<>(String.format("Editora com id %d não encontrado", publisherId), null);
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
     }
 
-    ResponseDTO<Publisher> responseDTO = new ResponseDTO<>("Livro encontrado com sucesso", optionalPublisher.get());
+    ResponseDTO<Publisher> responseDTO = new ResponseDTO<>("Editora encontrada com sucesso", optionalPublisher.get());
     return ResponseEntity.ok(responseDTO);
   }
 
