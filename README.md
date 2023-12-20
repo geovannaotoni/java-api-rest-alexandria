@@ -33,11 +33,11 @@ A API oferece endpoints para realizar operações CRUD (Create, Read, Update, De
 * `/api/publishers`: Gerencia informações das editoras.
 
 ### 🚀 Exemplos de Endpoints
-`GET /books`: Obtém todos os livros cadastrados.
-`GET /books/{id}`: Obtém detalhes de um livro específico.
-`POST /books`: Adiciona um novo livro.
-`PUT /books/{bookId}`: Atualiza informações de um livro.
-`DELETE /books/{bookId}`: Remove um livro.
+- `GET /books`: Obtém todos os livros cadastrados.
+- `GET /books/{id}`: Obtém detalhes de um livro específico.
+- `POST /books`: Adiciona um novo livro.
+- `PUT /books/{bookId}`: Atualiza informações de um livro.
+- `DELETE /books/{bookId}`: Remove um livro.
 
 Consulte a documentação detalhada da API para mais informações sobre os endpoints disponíveis e seus usos.
 
