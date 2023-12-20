@@ -5,6 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record BookDetailDTO(Long id, String sumary, @JsonProperty("page_count") Integer pageCount, String year, String isbn) {
   public BookDetail toBookDetail() {
-    return new BookDetail(id, sumary, pageCount, year, isbn);
+    return new BookDetail(id, sumary, pageCount, year, isbn, null);
   }
 }

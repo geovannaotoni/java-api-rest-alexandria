@@ -29,13 +29,13 @@ public class BookDetail {
 
   public BookDetail() {}
 
-  public BookDetail(Long id, String summary, Integer pageCount, String year, String isbn) {
+  public BookDetail(Long id, String summary, Integer pageCount, String year, String isbn, Book book) {
     this.id = id;
     this.summary = summary;
     this.pageCount = pageCount;
     this.year = year;
     this.isbn = isbn;
-//    this.book = book;
+    this.book = book;
   }
 
   public Long getId() {

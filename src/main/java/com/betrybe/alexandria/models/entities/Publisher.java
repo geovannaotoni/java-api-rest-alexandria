@@ -24,10 +24,11 @@ public class Publisher {
 
   public Publisher() {}
 
-  public Publisher(Long id, String name, String address) {
+  public Publisher(Long id, String name, String address, List<Book> books) {
     this.id = id;
     this.name = name;
     this.address = address;
+    this.books = books;
   }
 
   public Long getId() {
